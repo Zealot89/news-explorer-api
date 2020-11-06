@@ -1,6 +1,6 @@
 require('dotenv').config();
 const express = require('express');
-const helmet = require('helmet');
+// const helmet = require('helmet');
 const mongoose = require('mongoose');
 const { errors } = require('celebrate');
 
@@ -16,12 +16,12 @@ const NotFoundError = require('./errors/not-found-err');
 // const { login, createUser } = require('./controllers/users.js');
 
 const app = express();
-app.use(helmet());
+// app.use(helmet());
 
 const { PORT = 3000 } = process.env;
 
 const limit = rateLimit({
-  windowMs: 16 * 60 * 1000,
+  windowMs: 15 * 60 * 1000,
   max: 100,
   message: 'Слишком много запросов!',
 });
