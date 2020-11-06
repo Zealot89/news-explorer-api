@@ -21,7 +21,7 @@ app.use(helmet());
 const { PORT = 3000 } = process.env;
 
 const limit = rateLimit({
-  windowMs: 15 * 60 * 1000,
+  windowMs: 16 * 60 * 1000,
   max: 100,
   message: 'Слишком много запросов!',
 });
