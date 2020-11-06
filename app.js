@@ -1,13 +1,15 @@
 require('dotenv').config();
-const { celebrate, Joi, errors } = require('celebrate');
-const cors = require('cors');
 const express = require('express');
 const mongoose = require('mongoose');
+const { celebrate, Joi, errors } = require('celebrate');
+const helmet = require('helmet');
+const cors = require('cors');
 const bodyParser = require('body-parser');
 const rateLimit = require('express-rate-limit');
 const { errorLogger, requestLogger } = require('./middlewares/Logger');
-const { usersRouter } = require('./routes/users.js');
-const { articlesRouter } = require('./routes/articles.js');
+// const { usersRouter } = require('./routes/users.js');
+// const { articlesRouter } = require('./routes/articles.js');
+const { router } = require('./routes/index.js');
 const NotFoundError = require('./errors/not-found-err');
 const auth = require('./middlewares/auth.js');
 const { login, createUser } = require('./controllers/users.js');
@@ -29,6 +31,7 @@ mongoose.connect('mongodb://localhost:27017/explorerdb', {
   useUnifiedTopology: true,
 });
 
+app.use(helmet());
 app.use(cors());
 app.use(limit);
 app.use(bodyParser.json());
@@ -60,8 +63,10 @@ app.post(
 
 app.use(auth);
 
-app.use('/', usersRouter);
-app.use('/', articlesRouter);
+app.use('/', router);
+
+// app.use('/', usersRouter);
+// app.use('/', articlesRouter);
 app.all('/*', () => {
   throw new NotFoundError('Запрашиваемый ресурс не найден');
 });
@@ -70,14 +75,10 @@ app.use(errorLogger);
 app.use(errors());
 
 app.use((err, req, res, next) => {
-  // это обработчик ошибки
-  // если у ошибки нет статуса, выставляем 500
   const { statusCode = 500, message } = err;
-
   res
     .status(statusCode)
     .send({
-      // проверяем статус и выставляем сообщение в зависимости от него
       message: statusCode === 500
         ? 'На сервере произошла ошибка'
         : message,

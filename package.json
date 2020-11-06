@@ -29,6 +29,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.10.5",
     "validator": "^13.1.17",
+    "helmet": "^4.2.0",
     "winston": "^3.3.3"
   },
   "devDependencies": {
