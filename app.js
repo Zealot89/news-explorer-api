@@ -16,7 +16,6 @@ const NotFoundError = require('./errors/not-found-err');
 // const { login, createUser } = require('./controllers/users.js');
 
 const app = express();
-app.use(helmet());
 
 const { PORT = 3000 } = process.env;
 
@@ -34,7 +33,7 @@ mongoose.connect('mongodb://localhost:27017/explorerdb', {
 });
 
 app.use(cors());
-
+app.use(helmet());
 app.use(limit);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
