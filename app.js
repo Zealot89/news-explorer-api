@@ -1,8 +1,9 @@
 require('dotenv').config();
 const express = require('express');
+const helmet = require('helmet');
 const mongoose = require('mongoose');
 const { errors } = require('celebrate');
-const helmet = require('helmet');
+
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const rateLimit = require('express-rate-limit');
@@ -15,6 +16,7 @@ const NotFoundError = require('./errors/not-found-err');
 // const { login, createUser } = require('./controllers/users.js');
 
 const app = express();
+app.use(helmet());
 
 const { PORT = 3000 } = process.env;
 
@@ -32,7 +34,7 @@ mongoose.connect('mongodb://localhost:27017/explorerdb', {
 });
 
 app.use(cors());
-app.use(helmet());
+
 app.use(limit);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
