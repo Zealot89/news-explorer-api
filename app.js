@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
-const { celebrate, Joi, errors } = require('celebrate');
+const { errors } = require('celebrate');
 const helmet = require('helmet');
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -11,8 +11,8 @@ const { errorLogger, requestLogger } = require('./middlewares/Logger');
 // const { articlesRouter } = require('./routes/articles.js');
 const { router } = require('./routes/index.js');
 const NotFoundError = require('./errors/not-found-err');
-const auth = require('./middlewares/auth.js');
-const { login, createUser } = require('./controllers/users.js');
+// const auth = require('./middlewares/auth.js');
+// const { login, createUser } = require('./controllers/users.js');
 
 const app = express();
 
@@ -31,37 +31,36 @@ mongoose.connect('mongodb://localhost:27017/explorerdb', {
   useUnifiedTopology: true,
 });
 
-app.use(helmet());
 app.use(cors());
+app.use(helmet());
 app.use(limit);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(requestLogger);
 
-app.post(
-  '/signup',
-  celebrate({
-    body: Joi.object().keys({
-      name: Joi.string().required().alphanum().min(4),
-      email: Joi.string().required().email(),
-      password: Joi.string().required().alphanum().min(4),
-    }),
-  }),
-  createUser,
-);
-app.post(
-  '/signin',
-  celebrate({
-    body: Joi.object().keys({
-      email: Joi.string().required().email(),
-      password: Joi.string().required().min(4),
-    }),
-  }),
-  login,
-);
-
-app.use(auth);
+// app.post(
+//  '/signup',
+//  celebrate({
+//    body: Joi.object().keys({
+//      name: Joi.string().required().alphanum().min(4),
+//      email: Joi.string().required().email(),
+//      password: Joi.string().required().alphanum().min(4),
+//    }),
+//  }),
+//  createUser,
+// );
+// app.post(
+//  '/signin',
+//  celebrate({
+//    body: Joi.object().keys({
+//      email: Joi.string().required().email(),
+//      password: Joi.string().required().min(4),
+//    }),
+//  }),
+//  login,
+// );
+// app.use(auth);
 
 app.use('/', router);
 
