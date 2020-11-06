@@ -1,6 +1,6 @@
 require('dotenv').config();
 const express = require('express');
-const { helmet } = require('helmet');
+const helmet = require('helmet');
 const mongoose = require('mongoose');
 const { errors } = require('celebrate');
 
@@ -40,33 +40,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(requestLogger);
 
-// app.post(
-//  '/signup',
-//  celebrate({
-//    body: Joi.object().keys({
-//      name: Joi.string().required().alphanum().min(4),
-//      email: Joi.string().required().email(),
-//      password: Joi.string().required().alphanum().min(4),
-//    }),
-//  }),
-//  createUser,
-// );
-// app.post(
-//  '/signin',
-//  celebrate({
-//    body: Joi.object().keys({
-//      email: Joi.string().required().email(),
-//      password: Joi.string().required().min(4),
-//    }),
-//  }),
-//  login,
-// );
-// app.use(auth);
-
 app.use('/', router);
 
-// app.use('/', usersRouter);
-// app.use('/', articlesRouter);
 app.all('/*', () => {
   throw new NotFoundError('Запрашиваемый ресурс не найден');
 });
