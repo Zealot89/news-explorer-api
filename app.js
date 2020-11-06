@@ -33,8 +33,8 @@ mongoose.connect('mongodb://localhost:27017/explorerdb', {
 });
 
 app.use(cors());
-app.use(helmet());
 app.use(limit);
+app.use(helmet());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
