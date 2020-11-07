@@ -1,15 +1,13 @@
 require('dotenv').config();
 const express = require('express');
-const helmet = require('helmet');
+// const helmet = require('helmet');
 const mongoose = require('mongoose');
 const { errors } = require('celebrate');
-
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const rateLimit = require('express-rate-limit');
 const { errorLogger, requestLogger } = require('./middlewares/Logger');
 const { router } = require('./routes/index.js');
-const NotFoundError = require('./errors/not-found-err');
 
 const app = express();
 
@@ -30,17 +28,13 @@ mongoose.connect('mongodb://localhost:27017/explorerdb', {
 
 app.use(cors());
 app.use(limit);
-app.use(helmet());
+// app.use(helmet());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(requestLogger);
 
 app.use('/', router);
-
-app.all('/*', () => {
-  throw new NotFoundError('Запрашиваемый ресурс не найден');
-});
 
 app.use(errorLogger);
 app.use(errors());

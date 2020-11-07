@@ -1,6 +1,7 @@
 const Article = require('../models/article');
 const NotFoundError = require('../errors/not-found-err');
 const BadRequestError = require('../errors/bad-request-err');
+const ForbiddenError = require('../errors/forbidden-err');
 
 const getArticle = (req, res, next) => {
   Article.find({})
@@ -34,11 +35,16 @@ const addArticle = (req, res, next) => {
     .catch(next);
 };
 const deleteArticle = (req, res, next) => {
-  Article.findByIdAndRemove(req.params.articleId)
-    .orFail(new Error('Not Found'))
-    .then((article) => res.send({ data: article })).catch(() => {
-      throw new NotFoundError('Переданы некорректные данные в метод удаления карточки');
+  Article.findById(req.params.articleId).select('+owner')
+    .orFail(new NotFoundError('Переданы некорректные данные в метод удаления карточки'))
+    .then((article) => {
+      if (!article.owner._id.equals(req.user._id)) {
+        throw new ForbiddenError('Вы не можете удалять чужие карточки');
+      }
+      Article.remove(article)
+        .then(() => res.send({ data: article }));
     })
+
     .catch(next);
 };
 module.exports = { getArticle, addArticle, deleteArticle };
