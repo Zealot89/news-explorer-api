@@ -1,6 +1,6 @@
 require('dotenv').config();
 const express = require('express');
-// const helmet = require('helmet');
+const helmet = require('helmet');
 const mongoose = require('mongoose');
 const { errors } = require('celebrate');
 const cors = require('cors');
@@ -28,7 +28,7 @@ mongoose.connect('mongodb://localhost:27017/explorerdb', {
 
 app.use(cors());
 app.use(limit);
-// app.use(helmet());
+app.use(helmet());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
